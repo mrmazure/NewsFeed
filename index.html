@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RadioTools - NewsFeed by MrMazure</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ─── Header ──────────────────────────────────────────────────────────── -->
+    <header class="site-header">
+        <img src="rt_logo_head.png" alt="RadioTools" class="logo-header-small">
+        <span class="site-title"><b>RadioTools</b> | NewsFeed By MrMazure</span>
+    </header>
+
+    <!-- ─── Layout principal ──────────────────────────────────────────────── -->
+    <div id="app">
+
+        <!-- Colonne gauche : fil d'actualités -->
+        <div id="feed-panel">
+
+            <!-- En-tête : badges sources actives + indicateur de rafraîchissement -->
+            <div id="feed-header">
+                <span id="feed-title">Actus</span>
+                <div id="active-badges"><!-- rempli par JS --></div>
+                <div id="refresh-indicator">
+                    <div class="spinner"></div>
+                    Actualisation…
+                </div>
+                <span id="last-refresh"></span>
+                <span id="next-refresh"></span>
+            </div>
+
+            <!-- Zone de défilement -->
+            <div id="feed-viewport">
+                <div class="feed-fade feed-fade--bottom"></div>
+                <div id="feed-inner"><!-- cartes d'articles injectées par JS --></div>
+            </div>
+
+        </div>
+
+        <!-- Colonne droite : horloge + météo -->
+        <div id="right-panel">
+
+            <!-- Horloge canvas -->
+            <div id="clock-panel">
+                <canvas id="clock-canvas"></canvas>
+            </div>
+
+            <!-- Météo 3 jours -->
+            <div id="weather-panel">
+                <div id="weather-loading">
+                    <div class="spinner"></div>
+                    Chargement météo…
+                </div>
+                <div id="weather-content">
+                    <div id="weather-city">--</div>
+                    <div id="weather-main">
+                        <span id="weather-icon">☀️</span>
+                        <span id="weather-temp">--°C</span>
+                    </div>
+                    <div id="weather-desc">--</div>
+                    <div id="weather-chips">
+                        <span class="weather-chip">💨 <span id="weather-wind">--</span></span>
+                        <span class="weather-chip">💧 <span id="weather-hum">--</span></span>
+                    </div>
+                    <!-- Prévisions 3 jours, injectées par JS -->
+                    <div id="weather-forecast"></div>
+                    <div id="weather-updated">--</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div><!-- /#app -->
+
+    <!-- ─── Boutons overlay ───────────────────────────────────────────────── -->
+    <button id="btn-fullscreen" class="overlay-btn" title="Plein écran">⛶</button>
+    <button id="btn-config" class="overlay-btn" title="Configuration">⚙</button>
+
+    <!-- ─── Panneau de configuration (overlay) ───────────────────────────── -->
+    <div id="config-overlay">
+        <div id="config-box">
+
+            <div id="config-header">
+                <h2>⚙ Configuration</h2>
+                <button id="config-close" title="Fermer">✕</button>
+            </div>
+
+            <div id="config-body">
+
+                <!-- Section supprimée : vitesse de défilement -->
+
+                <div class="config-section">
+                    <div class="config-section-title">Échelle / Zoom (Spécial TV)</div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="config-btn zoom-btn" data-zoom="50">50%</button>
+                        <button class="config-btn zoom-btn" data-zoom="60">60%</button>
+                        <button class="config-btn zoom-btn" data-zoom="80">80%</button>
+                        <button class="config-btn zoom-btn" data-zoom="100">100%</button>
+						<button class="config-btn zoom-btn" data-zoom="120">120%</button>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <div class="config-section-title">Intervalle de rafraîchissement</div>
+                    <div class="config-slider-row">
+                        <input type="range" id="refresh-interval-slider" class="config-slider" min="1" max="30" step="1"
+                            value="5">
+                        <span class="config-slider-val"><span id="refresh-interval-val">5</span> min</span>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <div class="config-section-title">Ville Météo</div>
+                    <div class="config-form">
+                        <input type="text" id="weather-city-input" class="config-input"
+                            placeholder="Laissez vide pour auto">
+                        <button id="save-city-btn" class="config-btn">OK</button>
+                        <div id="save-city-msg"></div>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <div class="config-section-title">Sources RSS</div>
+                    <div id="sources-list"><!-- rempli par JS --></div>
+                </div>
+
+                <div class="config-section">
+                    <div class="config-section-title">Ajouter une source personnalisée</div>
+                    <div class="config-form">
+                        <input type="text" id="custom-name" class="config-input" placeholder="Nom de la source">
+                        <input type="url" id="custom-url" class="config-input" placeholder="URL du flux RSS">
+                        <button id="add-source-btn" class="config-btn">+ Ajouter</button>
+                        <div id="add-source-msg"></div>
+                    </div>
+                </div>
+
+            </div><!-- /config-body -->
+        </div><!-- /config-box -->
+    </div><!-- /config-overlay -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
